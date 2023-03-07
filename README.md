@@ -34,10 +34,10 @@ NOTE: RestSharp versions greater than 105.1.0 have a bug which causes file uploa
 
 ## Installation
 
+
 Run the following command to generate the DLL
 
-- [Mac/Linux] `/bin/sh build.sh`
-- [Windows] `build.bat`
+- [Mac/Linux/Windows] `dotnet build`
 
 Then include the DLL (under the `bin` folder) in the C# project, and use the namespaces:
 
@@ -48,21 +48,8 @@ using SimpleTracker.Web.Model;
 
 ```
 
-
-## Packaging
-
-A `.nuspec` is included with the project. You can follow the Nuget quickstart to [create](https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package#create-the-package) and [publish](https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package#publish-the-package) packages.
-
-This `.nuspec` uses placeholders from the `.csproj`, so build the `.csproj` directly:
-
-```
-nuget pack -Build -OutputDirectory out SimpleTracker.Web.csproj
-```
-
-Then, publish to a [local feed](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) or [other host](https://docs.microsoft.com/en-us/nuget/hosting-packages/overview) and consume the new package via Nuget as usual.
-
-
 ## Getting Started
+
 
 ```csharp
 using System.Collections.Generic;
