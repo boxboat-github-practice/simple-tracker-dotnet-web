@@ -30,6 +30,9 @@
                                   <th>
                                       Name
                                   </th>
+                                  <th>
+                                      URL
+                                  </th>
                           </tr>
                       </thead>
                       <tbody>
@@ -39,8 +42,11 @@
                                   @mc.Name
                               </td>
                               <td>
-                                  <a asp-action="Edit" asp-route-id="@mc.Id">Edit</a>
-                                  <a asp-action="Delete" asp-route-id="@mc.Id">Delete</a>
+                                  @mc.Url
+                              </td>
+                              <td>
+                                  <a asp-action="EditClient" asp-route-id="@mc.Id">Edit</a>
+                                  <a asp-action="DeleteClient" asp-route-id="@mc.Id">Delete</a>
                               </td>
                           </tr>
                   }

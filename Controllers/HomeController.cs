@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleTracker.Web.Models;
 using Newtonsoft.Json;
+using SimpleTracker.Web.Client;
+using SimpleTracker.Web.Api;
 
 namespace SimpleTracker.Web.Controllers;
 
@@ -22,6 +24,25 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult EditClient(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        ModelClient mc = apiInstance.ClientsClientIdGet((int)id);
+        return View(mc);
+    }
+   
+    [HttpPost]
+    public IActionResult EditClient(ModelClient mc)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        ClientsPostRequest cpr = new ClientsPostRequest(mc.Name, mc.Url);
+        apiInstance.ClientsClientIdPut(mc.Id, cpr);
+        return RedirectToAction(nameof(SimpleTracker));
     }
 
     public IActionResult SimpleTracker()

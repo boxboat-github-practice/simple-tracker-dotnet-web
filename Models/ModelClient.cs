@@ -43,6 +43,13 @@ namespace SimpleTracker.Web.Models
             this.Url = url;
         }
 
+         public ModelClient()
+        {
+            this.Id = default(int);
+            this.Name = default(string);
+            this.Url = default(string);
+        }
+
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
@@ -53,13 +60,13 @@ namespace SimpleTracker.Web.Models
         /// Gets or Sets Name
         /// </summary>
         [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or Sets Url
         /// </summary>
         [DataMember(Name="url", EmitDefaultValue=false)]
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
