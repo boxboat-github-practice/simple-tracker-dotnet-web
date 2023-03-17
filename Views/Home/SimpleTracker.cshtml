@@ -53,7 +53,61 @@
                       </tbody>
                   </table>
                 </div>
-                <div class="tab-pane" id="contract" role="tabpanel" aria-labelledby="contract-tab">contract</div>
+                <div class="tab-pane @(Model.contractActive ? "active" : "")" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+                  <a asp-action="CreateContract">Create new contract</a>
+                  <table class="table table-borderless">
+                      <thead>
+                          <tr>
+                                  <th>
+                                      ClientID
+                                  </th>
+                                  <th>
+                                      StartDate
+                                  </th>
+                                  <th>
+                                      EndDate
+                                  </th>
+                                  <th>
+                                      Type
+                                  </th>
+                                  <th>
+                                      Tech
+                                  </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                  @foreach (Contract c in Model.Contracts) {
+                          <tr>
+                              <td>
+                                  @c.ClientId
+                              </td>
+                              <td>
+                                  @c.StartDate
+                              </td>
+                              <td>
+                                  @c.EndDate
+                              </td>
+                              <td>
+                                  @c.Type
+                              </td>
+                              <td>
+                                Tech:
+                                <ul>
+                                  @foreach (String tech in c.Tech)
+                                  {
+                                    <li>@tech</li>
+                                  }
+                                </ul>
+                              </td>
+                              <td>
+                                  <a asp-action="EditContract" asp-route-id="@c.Id">Edit</a>
+                                  <a asp-action="DeleteContract" asp-route-id="@c.Id">Delete</a>
+                              </td>
+                          </tr>
+                  }
+                      </tbody>
+                  </table>
+                </div>
                 <div class="tab-pane @(Model.employeeActive ? "active" : "")" id="employee" role="tabpanel" aria-labelledby="employee-tab">
                   <a asp-action="CreateEmployee">Create new employee</a>
                   <table class="table table-borderless">

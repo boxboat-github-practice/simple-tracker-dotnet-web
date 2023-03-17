@@ -1,0 +1,56 @@
+﻿@model Contract
+@{
+    ViewData["Title"] = "Edit contract";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("EditContract", "Home", FormMethod.Post))
+    {
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2" align="center">Edit client</th>
+            </tr>
+            <tr>
+                <td>ClientID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.ClientId)
+                </td>
+            </tr>
+            <tr>
+                <td>StartDate: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>EndDate: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.EndDate)
+                </td>
+            </tr>
+            <tr>
+                <td>Type: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Type)
+                </td>
+            </tr>
+            <tr>
+                <td>Tech: </td>
+                <td>
+                @for (var i = 0; i < Model.Tech.Count; i++) {
+                    @Html.TextBoxFor(m => m.Tech[i])
+                }
+                </td>
+            </tr>
+            <tr>
+                <td>ID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Id, new { disabled="disabled", @readonly = "readonly" })
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit"/></td>
+            </tr>
+        </table>
+    }

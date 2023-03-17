@@ -119,6 +119,52 @@ public class HomeController : Controller
     }
     //end employee API CRUD
 
+    //begin contract API CRUD
+    [HttpGet]
+    public IActionResult DeleteContract(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        apiInstance.ContractsContractIdDelete((int)id);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
+    }
+
+    [HttpGet]
+    public IActionResult EditContract(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        Contract ctr = apiInstance.ContractsContractIdGet((int)id);
+        return View(ctr);
+    }
+    
+    [HttpGet]
+    public IActionResult CreateContract()
+    {
+       return View();
+    }
+
+    [HttpPost]
+    public IActionResult CreateContract(Contract ctr)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech[0].Split(',').ToList());
+        apiInstance.ContractsPost(cp);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
+    }
+   
+    [HttpPost]
+    public IActionResult EditContract(Contract ctr)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech);
+        apiInstance.ContractsContractIdPut(ctr.Id, cp);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
+    }
+    //end contract API CRUD
+
     public IActionResult SimpleTracker()
     {
         SimpleTrackerViewModel stvm = new SimpleTrackerViewModel();
@@ -137,6 +183,12 @@ public class HomeController : Controller
             ? JsonConvert.DeserializeObject<List<Employee>>(employeeResponse.Content.ToString()!)
             : default(List<Employee>);
         stvm.Employees = allEmployees!;
+
+        RestSharp.RestResponse contractResponse = (RestSharp.RestResponse)cl.CallApi("/contracts", RestSharp.Method.GET, new List<KeyValuePair<string, string>>(), null, headers, new Dictionary<string,string>(), new Dictionary<string, RestSharp.FileParameter>(), new Dictionary<string,string>(), "application/json");
+        var allContracts = contractResponse.Content.ToString() != null
+            ? JsonConvert.DeserializeObject<List<Contract>>(contractResponse.Content.ToString()!)
+            : default(List<Contract>);
+        stvm.Contracts = allContracts!;
 
         string apiMethodType = this.ControllerContext.HttpContext.Request.Query["methodType"].ToString();
 

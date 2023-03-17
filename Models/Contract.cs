@@ -49,6 +49,16 @@ namespace SimpleTracker.Web.Models
             this.Tech = tech;
         }
 
+        public Contract()
+        {
+            this.ClientId = default(int);
+            this.Id = default(int);
+            this.Type = default(string);
+            this.StartDate = default(string);
+            this.EndDate = default(string);
+            this.Tech = default(List<string>);
+        }
+
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
@@ -65,25 +75,25 @@ namespace SimpleTracker.Web.Models
         /// Gets or Sets Type
         /// </summary>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// Gets or Sets StartDate
         /// </summary>
         [DataMember(Name="startDate", EmitDefaultValue=false)]
-        public string StartDate { get; set; }
+        public string? StartDate { get; set; }
 
         /// <summary>
         /// Gets or Sets EndDate
         /// </summary>
         [DataMember(Name="endDate", EmitDefaultValue=false)]
-        public string EndDate { get; set; }
+        public string? EndDate { get; set; }
 
         /// <summary>
         /// Gets or Sets Tech
         /// </summary>
         [DataMember(Name="tech", EmitDefaultValue=false)]
-        public List<string> Tech { get; set; }
+        public List<string>? Tech { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
