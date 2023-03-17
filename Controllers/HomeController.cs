@@ -27,12 +27,38 @@ public class HomeController : Controller
     }
 
     [HttpGet]
+    public IActionResult DeleteClient(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        apiInstance.ClientsClientIdDelete((int)id);
+        return RedirectToAction(nameof(SimpleTracker));
+    }
+
+    [HttpGet]
     public IActionResult EditClient(int? id)
     {
         Configuration.Default.BasePath = "http://localhost:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ModelClient mc = apiInstance.ClientsClientIdGet((int)id);
         return View(mc);
+    }
+
+    
+    [HttpGet]
+    public IActionResult CreateClient()
+    {
+       return View();
+    }
+
+    [HttpPost]
+    public IActionResult CreateClient(ModelClient mc)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        ClientsPostRequest cpr = new ClientsPostRequest(mc.Name, mc.Url);
+        apiInstance.ClientsPost(cpr);
+        return RedirectToAction(nameof(SimpleTracker));
     }
    
     [HttpPost]
