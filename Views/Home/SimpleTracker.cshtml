@@ -139,7 +139,60 @@
                       </tbody>
                   </table>
                 </div>
-                <div class="tab-pane" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
+                <div class="tab-pane @(Model.historyActive ? "active" : "")" id="history" role="tabpanel" aria-labelledby="history-tab">
+                    <a asp-action="CreateHistory">Create new history</a>
+                  <table class="table table-borderless">
+                      <thead>
+                          <tr>
+                                  <th>
+                                      ClientID
+                                  </th>
+                                  <th>
+                                      ContractID
+                                  </th>
+                                  <th>
+                                      EmployeeID
+                                  </th>
+                                  <th>
+                                      ClientName
+                                  </th>
+                                  <th>
+                                      EmployeeName
+                                  </th>
+                                  <th>
+                                      Role
+                                  </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                  @foreach (History h in Model.Histories) {
+                          <tr>
+                              <td>
+                                  @h.ClientId
+                              </td>
+                              <td>
+                                  @h.ContractId
+                              </td>
+                              <td>
+                                  @h.EmployeeId
+                              </td>
+                              <td>
+                                  @h.ClientName
+                              </td>
+                              <td>
+                                  @h.EmployeeName
+                              </td>
+                              <td>
+                                  @h.Role
+                              </td>
+                              <td>
+                                  <a asp-action="DeleteHistory" asp-route-id="@h.Id">Delete</a>
+                              </td>
+                          </tr>
+                  }
+                      </tbody>
+                  </table>
+                </div>
               </div>
 
               <asp:HiddenField ID="TabName" runat="server" />

@@ -51,6 +51,17 @@ namespace SimpleTracker.Web.Models
             this.Role = role;
         }
 
+        public History()
+        {
+            this.Id = default(int);
+            this.ClientId = default(int);
+            this.ContractId = default(int);
+            this.EmployeeId = default(int);
+            this.ClientName = default(string);
+            this.EmployeeName = default(string);
+            this.Role = default(string);
+        }
+
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
@@ -79,19 +90,19 @@ namespace SimpleTracker.Web.Models
         /// Gets or Sets ClientName
         /// </summary>
         [DataMember(Name="clientName", EmitDefaultValue=false)]
-        public string ClientName { get; set; }
+        public string? ClientName { get; set; }
 
         /// <summary>
         /// Gets or Sets EmployeeName
         /// </summary>
         [DataMember(Name="employeeName", EmitDefaultValue=false)]
-        public string EmployeeName { get; set; }
+        public string? EmployeeName { get; set; }
 
         /// <summary>
         /// Gets or Sets Role
         /// </summary>
         [DataMember(Name="role", EmitDefaultValue=false)]
-        public string Role { get; set; }
+        public string? Role { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

@@ -165,6 +165,43 @@ public class HomeController : Controller
     }
     //end contract API CRUD
 
+
+    //begin history API CRUD
+    [HttpGet]
+    public IActionResult DeleteHistory(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        apiInstance.HistoryHistoryIdDelete((int)id);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=history"));
+    }
+
+    [HttpGet]
+    public IActionResult EditHistory(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        History hst = apiInstance.HistoryHistoryIdGet((int)id);
+        return View(hst);
+    }
+    
+    [HttpGet]
+    public IActionResult CreateHistory()
+    {
+       return View();
+    }
+
+    [HttpPost]
+    public IActionResult CreateHistory(History hst)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        HistoryPatch hp = new HistoryPatch(hst.ClientId, hst.ContractId, hst.EmployeeId, hst.Role);
+        apiInstance.HistoryPost(hp);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=history"));
+    }
+    //end history API CRUD
+
     public IActionResult SimpleTracker()
     {
         SimpleTrackerViewModel stvm = new SimpleTrackerViewModel();
@@ -189,6 +226,12 @@ public class HomeController : Controller
             ? JsonConvert.DeserializeObject<List<Contract>>(contractResponse.Content.ToString()!)
             : default(List<Contract>);
         stvm.Contracts = allContracts!;
+
+        RestSharp.RestResponse historyResponse = (RestSharp.RestResponse)cl.CallApi("/history", RestSharp.Method.GET, new List<KeyValuePair<string, string>>(), null, headers, new Dictionary<string,string>(), new Dictionary<string, RestSharp.FileParameter>(), new Dictionary<string,string>(), "application/json");
+        var allHistory = historyResponse.Content.ToString() != null
+            ? JsonConvert.DeserializeObject<List<History>>(historyResponse.Content.ToString()!)
+            : default(List<History>);
+        stvm.Histories = allHistory!;
 
         string apiMethodType = this.ControllerContext.HttpContext.Request.Query["methodType"].ToString();
 

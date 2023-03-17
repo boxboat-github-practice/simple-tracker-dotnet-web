@@ -1,0 +1,54 @@
+﻿@model History
+@{
+    ViewData["Title"] = "Create history";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("CreateHistory", "Home", FormMethod.Post))
+    {
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2" align="center">Create history</th>
+            </tr>
+            <tr>
+                <td>ClientID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.ClientId)
+                </td>
+            </tr>
+            <tr>
+                <td>ClientName: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.ClientName)
+                </td>
+            </tr>
+            <tr>
+                <td>ContractID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.ContractId)
+                </td>
+            </tr>
+            <tr>
+                <td>EmployeeID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.EmployeeId)
+                </td>
+            </tr>
+            <tr>
+                <td>EmployeeName: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.EmployeeName)
+                </td>
+            </tr>
+            <tr>
+                <td>Role: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Role)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit"/></td>
+            </tr>
+        </table>
+    }
