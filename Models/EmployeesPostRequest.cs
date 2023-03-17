@@ -22,7 +22,7 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 using OpenAPIDateConverter = SimpleTracker.Web.Client.OpenAPIDateConverter;
 
-namespace SimpleTracker.Web.Model
+namespace SimpleTracker.Web.Models
 {
     /// <summary>
     /// EmployeesPostRequest

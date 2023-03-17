@@ -22,25 +22,25 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 using OpenAPIDateConverter = SimpleTracker.Web.Client.OpenAPIDateConverter;
 
-namespace SimpleTracker.Web.Model
+namespace SimpleTracker.Web.Models
 {
     /// <summary>
-    /// Employee data
+    /// Client data
     /// </summary>
     [DataContract]
-    public partial class Employee :  IEquatable<Employee>, IValidatableObject
+    public partial class ModelClient :  IEquatable<ModelClient>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Employee" /> class.
+        /// Initializes a new instance of the <see cref="ModelClient" /> class.
         /// </summary>
         /// <param name="id">id.</param>
         /// <param name="name">name.</param>
-        /// <param name="github">github.</param>
-        public Employee(int id = default(int), string name = default(string), string github = default(string))
+        /// <param name="url">url.</param>
+        public ModelClient(int id = default(int), string name = default(string), string url = default(string))
         {
             this.Id = id;
             this.Name = name;
-            this.Github = github;
+            this.Url = url;
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace SimpleTracker.Web.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Github
+        /// Gets or Sets Url
         /// </summary>
-        [DataMember(Name="github", EmitDefaultValue=false)]
-        public string Github { get; set; }
+        [DataMember(Name="url", EmitDefaultValue=false)]
+        public string Url { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -68,10 +68,10 @@ namespace SimpleTracker.Web.Model
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class Employee {\n");
+            sb.Append("class ModelClient {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  Github: ").Append(Github).Append("\n");
+            sb.Append("  Url: ").Append(Url).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -92,15 +92,15 @@ namespace SimpleTracker.Web.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as Employee);
+            return this.Equals(input as ModelClient);
         }
 
         /// <summary>
-        /// Returns true if Employee instances are equal
+        /// Returns true if ModelClient instances are equal
         /// </summary>
-        /// <param name="input">Instance of Employee to be compared</param>
+        /// <param name="input">Instance of ModelClient to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(Employee input)
+        public bool Equals(ModelClient input)
         {
             if (input == null)
                 return false;
@@ -117,9 +117,9 @@ namespace SimpleTracker.Web.Model
                     this.Name.Equals(input.Name))
                 ) && 
                 (
-                    this.Github == input.Github ||
-                    (this.Github != null &&
-                    this.Github.Equals(input.Github))
+                    this.Url == input.Url ||
+                    (this.Url != null &&
+                    this.Url.Equals(input.Url))
                 );
         }
 
@@ -136,8 +136,8 @@ namespace SimpleTracker.Web.Model
                     hashCode = hashCode * 59 + this.Id.GetHashCode();
                 if (this.Name != null)
                     hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.Github != null)
-                    hashCode = hashCode * 59 + this.Github.GetHashCode();
+                if (this.Url != null)
+                    hashCode = hashCode * 59 + this.Url.GetHashCode();
                 return hashCode;
             }
         }

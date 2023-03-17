@@ -22,27 +22,29 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 using OpenAPIDateConverter = SimpleTracker.Web.Client.OpenAPIDateConverter;
 
-namespace SimpleTracker.Web.Model
+namespace SimpleTracker.Web.Models
 {
     /// <summary>
-    /// employee contract assignment data for update or creation
+    /// Contract data for update or creation
     /// </summary>
     [DataContract]
-    public partial class HistoryPatch :  IEquatable<HistoryPatch>, IValidatableObject
+    public partial class ContractPatch :  IEquatable<ContractPatch>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HistoryPatch" /> class.
+        /// Initializes a new instance of the <see cref="ContractPatch" /> class.
         /// </summary>
         /// <param name="clientId">clientId.</param>
-        /// <param name="contractId">contractId.</param>
-        /// <param name="employeeId">employeeId.</param>
-        /// <param name="role">role.</param>
-        public HistoryPatch(int clientId = default(int), int contractId = default(int), int employeeId = default(int), string role = default(string))
+        /// <param name="type">type.</param>
+        /// <param name="startDate">startDate.</param>
+        /// <param name="endDate">endDate.</param>
+        /// <param name="tech">tech.</param>
+        public ContractPatch(int clientId = default(int), string type = default(string), string startDate = default(string), string endDate = default(string), List<string> tech = default(List<string>))
         {
             this.ClientId = clientId;
-            this.ContractId = contractId;
-            this.EmployeeId = employeeId;
-            this.Role = role;
+            this.Type = type;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.Tech = tech;
         }
 
         /// <summary>
@@ -52,22 +54,28 @@ namespace SimpleTracker.Web.Model
         public int ClientId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ContractId
+        /// Gets or Sets Type
         /// </summary>
-        [DataMember(Name="contractId", EmitDefaultValue=false)]
-        public int ContractId { get; set; }
+        [DataMember(Name="type", EmitDefaultValue=false)]
+        public string Type { get; set; }
 
         /// <summary>
-        /// Gets or Sets EmployeeId
+        /// Gets or Sets StartDate
         /// </summary>
-        [DataMember(Name="employeeId", EmitDefaultValue=false)]
-        public int EmployeeId { get; set; }
+        [DataMember(Name="startDate", EmitDefaultValue=false)]
+        public string StartDate { get; set; }
 
         /// <summary>
-        /// Gets or Sets Role
+        /// Gets or Sets EndDate
         /// </summary>
-        [DataMember(Name="role", EmitDefaultValue=false)]
-        public string Role { get; set; }
+        [DataMember(Name="endDate", EmitDefaultValue=false)]
+        public string EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Tech
+        /// </summary>
+        [DataMember(Name="tech", EmitDefaultValue=false)]
+        public List<string> Tech { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -76,11 +84,12 @@ namespace SimpleTracker.Web.Model
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class HistoryPatch {\n");
+            sb.Append("class ContractPatch {\n");
             sb.Append("  ClientId: ").Append(ClientId).Append("\n");
-            sb.Append("  ContractId: ").Append(ContractId).Append("\n");
-            sb.Append("  EmployeeId: ").Append(EmployeeId).Append("\n");
-            sb.Append("  Role: ").Append(Role).Append("\n");
+            sb.Append("  Type: ").Append(Type).Append("\n");
+            sb.Append("  StartDate: ").Append(StartDate).Append("\n");
+            sb.Append("  EndDate: ").Append(EndDate).Append("\n");
+            sb.Append("  Tech: ").Append(Tech).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -101,15 +110,15 @@ namespace SimpleTracker.Web.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as HistoryPatch);
+            return this.Equals(input as ContractPatch);
         }
 
         /// <summary>
-        /// Returns true if HistoryPatch instances are equal
+        /// Returns true if ContractPatch instances are equal
         /// </summary>
-        /// <param name="input">Instance of HistoryPatch to be compared</param>
+        /// <param name="input">Instance of ContractPatch to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(HistoryPatch input)
+        public bool Equals(ContractPatch input)
         {
             if (input == null)
                 return false;
@@ -121,19 +130,25 @@ namespace SimpleTracker.Web.Model
                     this.ClientId.Equals(input.ClientId))
                 ) && 
                 (
-                    this.ContractId == input.ContractId ||
-                    (this.ContractId != null &&
-                    this.ContractId.Equals(input.ContractId))
+                    this.Type == input.Type ||
+                    (this.Type != null &&
+                    this.Type.Equals(input.Type))
                 ) && 
                 (
-                    this.EmployeeId == input.EmployeeId ||
-                    (this.EmployeeId != null &&
-                    this.EmployeeId.Equals(input.EmployeeId))
+                    this.StartDate == input.StartDate ||
+                    (this.StartDate != null &&
+                    this.StartDate.Equals(input.StartDate))
                 ) && 
                 (
-                    this.Role == input.Role ||
-                    (this.Role != null &&
-                    this.Role.Equals(input.Role))
+                    this.EndDate == input.EndDate ||
+                    (this.EndDate != null &&
+                    this.EndDate.Equals(input.EndDate))
+                ) && 
+                (
+                    this.Tech == input.Tech ||
+                    this.Tech != null &&
+                    input.Tech != null &&
+                    this.Tech.SequenceEqual(input.Tech)
                 );
         }
 
@@ -148,12 +163,14 @@ namespace SimpleTracker.Web.Model
                 int hashCode = 41;
                 if (this.ClientId != null)
                     hashCode = hashCode * 59 + this.ClientId.GetHashCode();
-                if (this.ContractId != null)
-                    hashCode = hashCode * 59 + this.ContractId.GetHashCode();
-                if (this.EmployeeId != null)
-                    hashCode = hashCode * 59 + this.EmployeeId.GetHashCode();
-                if (this.Role != null)
-                    hashCode = hashCode * 59 + this.Role.GetHashCode();
+                if (this.Type != null)
+                    hashCode = hashCode * 59 + this.Type.GetHashCode();
+                if (this.StartDate != null)
+                    hashCode = hashCode * 59 + this.StartDate.GetHashCode();
+                if (this.EndDate != null)
+                    hashCode = hashCode * 59 + this.EndDate.GetHashCode();
+                if (this.Tech != null)
+                    hashCode = hashCode * 59 + this.Tech.GetHashCode();
                 return hashCode;
             }
         }

@@ -1,0 +1,84 @@
+﻿@model SimpleTrackerViewModel
+@{
+    ViewData["Title"] = "SimpleTracker";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="col-sm-offset-3 col-sm-6" role="tabpanel">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link" id="client-tab" data-toggle="tab" href="#client" role="tab" aria-controls="client" aria-selected="true">client</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false">contract</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="employee-tab" data-toggle="tab" href="#employee" role="tab" aria-controls="employee" aria-selected="false">employee</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">history</a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <div class="tab-pane active" id="client" role="tabpanel" aria-labelledby="client-tab">
+                  <table class="table table-borderless">
+                      <thead>
+                          <tr>
+                                  <th>
+                                      Name
+                                  </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                  @foreach (ModelClient mc in Model.Clients) {
+                          <tr>
+                              <td>
+                                  @mc.Name
+                              </td>
+                              <td>
+                                  <a asp-action="Edit" asp-route-id="@mc.Id">Edit</a>
+                                  <a asp-action="Delete" asp-route-id="@mc.Id">Delete</a>
+                              </td>
+                          </tr>
+                  }
+                      </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="contract" role="tabpanel" aria-labelledby="contract-tab">contract</div>
+                <div class="tab-pane" id="employee" role="tabpanel" aria-labelledby="employee-tab">employee</div>
+                <div class="tab-pane" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
+              </div>
+
+              <asp:HiddenField ID="TabName" runat="server" />
+
+              <script type="text/javascript">
+              $('#client-tab').on('click', function (e) {
+                let currentActive = document.querySelector(".tab-pane.active");
+                currentActive.classList.remove("active");
+                $('#client').addClass("active");
+              })
+
+              $('#contract-tab').on('click', function (e) {
+                let currentActive = document.querySelector(".tab-pane.active");
+                currentActive.classList.remove("active");
+                $('#contract').addClass("active");
+              })
+
+              $('#employee-tab').on('click', function (e) {
+                let currentActive = document.querySelector(".tab-pane.active");
+                currentActive.classList.remove("active");
+                $('#employee').addClass("active");
+              })
+
+              $('#history-tab').on('click', function (e) {
+                let currentActive = document.querySelector(".tab-pane.active");
+                currentActive.classList.remove("active");
+                $('#history').addClass("active");
+              })
+              </script>
+        </div>
+    </div>
+</div>

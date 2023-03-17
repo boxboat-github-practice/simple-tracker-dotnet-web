@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading;
 using RestSharp;
 using SimpleTracker.Web.Client;
-using SimpleTracker.Web.Model;
+using SimpleTracker.Web.Models;
 
 namespace SimpleTracker.Web.Api
 {
