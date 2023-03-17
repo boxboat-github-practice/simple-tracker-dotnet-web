@@ -26,6 +26,7 @@ public class HomeController : Controller
         return View();
     }
 
+    //begin client API CRUD
     [HttpGet]
     public IActionResult DeleteClient(int? id)
     {
@@ -70,6 +71,53 @@ public class HomeController : Controller
         apiInstance.ClientsClientIdPut(mc.Id, cpr);
         return RedirectToAction(nameof(SimpleTracker));
     }
+    //end client API CRUD
+
+    //begin employee API CRUD
+    [HttpGet]
+    public IActionResult DeleteEmployee(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        apiInstance.EmployeesEmployeeIdDelete((int)id);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=employee"));
+    }
+
+    [HttpGet]
+    public IActionResult EditEmployee(int? id)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        Employee emp = apiInstance.EmployeesEmployeeIdGet((int)id);
+        return View(emp);
+    }
+    
+    [HttpGet]
+    public IActionResult CreateEmployee()
+    {
+       return View();
+    }
+
+    [HttpPost]
+    public IActionResult CreateEmployee(Employee emp)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        EmployeesPostRequest epr = new EmployeesPostRequest(emp.Name, emp.Github);
+        apiInstance.EmployeesPost(epr);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=employee"));
+    }
+   
+    [HttpPost]
+    public IActionResult EditEmployee(Employee emp)
+    {
+        Configuration.Default.BasePath = "http://localhost:8080";
+        var apiInstance = new DefaultApi(Configuration.Default);
+        EmployeesPostRequest epr = new EmployeesPostRequest(emp.Name, emp.Github);
+        apiInstance.EmployeesEmployeeIdPut(emp.Id, epr);
+        return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=employee"));
+    }
+    //end employee API CRUD
 
     public IActionResult SimpleTracker()
     {
@@ -77,13 +125,38 @@ public class HomeController : Controller
         SimpleTracker.Web.Client.ApiClient cl = new Client.ApiClient("http://localhost:8080");
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("accept", "text/plain");
+
         RestSharp.RestResponse clientResponse = (RestSharp.RestResponse)cl.CallApi("/clients", RestSharp.Method.GET, new List<KeyValuePair<string, string>>(), null, headers, new Dictionary<string,string>(), new Dictionary<string, RestSharp.FileParameter>(), new Dictionary<string,string>(), "application/json");
         var allClients = clientResponse.Content.ToString() != null
             ? JsonConvert.DeserializeObject<List<ModelClient>>(clientResponse.Content.ToString()!)
             : default(List<ModelClient>);
-        
-        
         stvm.Clients = allClients!;
+
+        RestSharp.RestResponse employeeResponse = (RestSharp.RestResponse)cl.CallApi("/employees", RestSharp.Method.GET, new List<KeyValuePair<string, string>>(), null, headers, new Dictionary<string,string>(), new Dictionary<string, RestSharp.FileParameter>(), new Dictionary<string,string>(), "application/json");
+        var allEmployees = employeeResponse.Content.ToString() != null
+            ? JsonConvert.DeserializeObject<List<Employee>>(employeeResponse.Content.ToString()!)
+            : default(List<Employee>);
+        stvm.Employees = allEmployees!;
+
+        string apiMethodType = this.ControllerContext.HttpContext.Request.Query["methodType"].ToString();
+
+        if(apiMethodType.Equals("employee"))
+        {
+            stvm.employeeActive = true;
+        }
+        else if(apiMethodType.Equals("contract"))
+        {
+            stvm.contractActive = true;
+        }
+        else if(apiMethodType.Equals("history"))
+        {
+            stvm.historyActive = true;
+        }
+        else
+        {
+            stvm.clientActive = true;
+        }
+
         return View(stvm);
     }
 

@@ -43,6 +43,13 @@ namespace SimpleTracker.Web.Models
             this.Github = github;
         }
 
+        public Employee()
+        {
+            this.Id = default(int);
+            this.Name = default(string);
+            this.Github = default(string);
+        }
+
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
@@ -53,13 +60,13 @@ namespace SimpleTracker.Web.Models
         /// Gets or Sets Name
         /// </summary>
         [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or Sets Github
         /// </summary>
         [DataMember(Name="github", EmitDefaultValue=false)]
-        public string Github { get; set; }
+        public string? Github { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

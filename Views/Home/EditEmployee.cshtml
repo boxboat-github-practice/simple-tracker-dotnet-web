@@ -1,0 +1,36 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Edit employee";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("EditEmployee", "Home", FormMethod.Post))
+    {
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2" align="center">Edit client</th>
+            </tr>
+            <tr>
+                <td>Name: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>GitHub: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Github)
+                </td>
+            </tr>
+            <tr>
+                <td>ID: </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Id, new { disabled="disabled", @readonly = "readonly" })
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit"/></td>
+            </tr>
+        </table>
+    }
