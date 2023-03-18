@@ -4,6 +4,7 @@ using SimpleTracker.Web.Models;
 using Newtonsoft.Json;
 using SimpleTracker.Web.Client;
 using SimpleTracker.Web.Api;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SimpleTracker.Web.Controllers;
 
@@ -11,13 +12,18 @@ public class HomeController : Controller
 {
    
     private readonly ILogger<HomeController> _logger;
+    private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _webHostEnvironment;
+    private readonly IConfiguration? _config;
     SimpleTrackerViewModel? stvm;
 
-    public HomeController(ILogger<HomeController> logger)
-    {
+    public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment, IConfiguration config)
+	{
         _logger = logger;
         stvm = new SimpleTrackerViewModel();
-    }
+		_webHostEnvironment = webHostEnvironment;
+        _config = config;
+       Configuration.Default.BasePath = _config.GetValue<string>("ApiUrl");
+	}
 
     public IActionResult Index()
     {
@@ -35,7 +41,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult DeleteClient(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         apiInstance.ClientsClientIdDelete((int)id);
         return RedirectToAction(nameof(SimpleTracker));
@@ -44,7 +49,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditClient(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ModelClient mc = apiInstance.ClientsClientIdGet((int)id);
         return View(mc);
@@ -60,7 +64,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult CreateClient(ModelClient mc)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ClientsPostRequest cpr = new ClientsPostRequest(mc.Name, mc.Url);
         apiInstance.ClientsPost(cpr);
@@ -70,7 +73,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EditClient(ModelClient mc)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ClientsPostRequest cpr = new ClientsPostRequest(mc.Name, mc.Url);
         apiInstance.ClientsClientIdPut(mc.Id, cpr);
@@ -82,7 +84,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult DeleteEmployee(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         apiInstance.EmployeesEmployeeIdDelete((int)id);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=employee"));
@@ -91,7 +92,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditEmployee(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         Employee emp = apiInstance.EmployeesEmployeeIdGet((int)id);
         return View(emp);
@@ -106,7 +106,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult CreateEmployee(Employee emp)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         EmployeesPostRequest epr = new EmployeesPostRequest(emp.Name, emp.Github);
         apiInstance.EmployeesPost(epr);
@@ -116,7 +115,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EditEmployee(Employee emp)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         EmployeesPostRequest epr = new EmployeesPostRequest(emp.Name, emp.Github);
         apiInstance.EmployeesEmployeeIdPut(emp.Id, epr);
@@ -128,7 +126,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult DeleteContract(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         apiInstance.ContractsContractIdDelete((int)id);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
@@ -137,7 +134,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditContract(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         Contract ctr = apiInstance.ContractsContractIdGet((int)id);
         return View(ctr);
@@ -152,7 +148,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult CreateContract(Contract ctr)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech[0].Split(',').ToList());
         apiInstance.ContractsPost(cp);
@@ -162,7 +157,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EditContract(Contract ctr)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech);
         apiInstance.ContractsContractIdPut(ctr.Id, cp);
@@ -175,7 +169,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult DeleteHistory(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         apiInstance.HistoryHistoryIdDelete((int)id);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=history"));
@@ -184,7 +177,6 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditHistory(int? id)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         History hst = apiInstance.HistoryHistoryIdGet((int)id);
         return View(hst);
@@ -199,7 +191,6 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult CreateHistory(History hst)
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         HistoryPatch hp = new HistoryPatch(hst.ClientId, hst.ContractId, hst.EmployeeId, hst.Role);
         apiInstance.HistoryPost(hp);
@@ -209,7 +200,6 @@ public class HomeController : Controller
 
     public IActionResult SimpleTracker()
     {
-        Configuration.Default.BasePath = "http://host.docker.internal:8080";
         var apiInstance = new DefaultApi(Configuration.Default);
         stvm.Clients = apiInstance.ClientsGet();
         stvm.Employees = apiInstance.EmployeesGet();
