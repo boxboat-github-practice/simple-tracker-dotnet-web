@@ -1,0 +1,8 @@
+name: simple-tracker-dotnet-web ghcr docker build & push
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: boxboat-github-practice/reusable-workflows/.github/workflows/docker-build.yaml@main
