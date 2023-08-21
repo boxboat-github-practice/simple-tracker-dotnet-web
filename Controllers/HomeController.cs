@@ -1,27 +1,29 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SimpleTracker.Web.Models;
-using Newtonsoft.Json;
 using SimpleTracker.Web.Client;
 using SimpleTracker.Web.Api;
-using Microsoft.AspNetCore.Hosting;
+using SimpleTracker.Web.Data;
+using System.Linq;
 
 namespace SimpleTracker.Web.Controllers;
 
 public class HomeController : Controller
 {
-   
+
     private readonly ILogger<HomeController> _logger;
     private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _webHostEnvironment;
     private readonly IConfiguration? _config;
+    private readonly SimpleTrackerContext _context;
     SimpleTrackerViewModel? stvm;
 
-    public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment, IConfiguration config)
+    public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment, IConfiguration config, SimpleTrackerContext context)
 	{
         _logger = logger;
         stvm = new SimpleTrackerViewModel();
 		_webHostEnvironment = webHostEnvironment;
         _config = config;
+        _context = context;
        Configuration.Default.BasePath = _config.GetValue<string>("ApiUrl");
 	}
 
@@ -54,7 +56,7 @@ public class HomeController : Controller
         return View(mc);
     }
 
-    
+
     [HttpGet]
     public IActionResult CreateClient()
     {
@@ -69,7 +71,7 @@ public class HomeController : Controller
         apiInstance.ClientsPost(cpr);
         return RedirectToAction(nameof(SimpleTracker));
     }
-   
+
     [HttpPost]
     public IActionResult EditClient(ModelClient mc)
     {
@@ -96,7 +98,7 @@ public class HomeController : Controller
         Employee emp = apiInstance.EmployeesEmployeeIdGet((int)id);
         return View(emp);
     }
-    
+
     [HttpGet]
     public IActionResult CreateEmployee()
     {
@@ -111,7 +113,7 @@ public class HomeController : Controller
         apiInstance.EmployeesPost(epr);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=employee"));
     }
-   
+
     [HttpPost]
     public IActionResult EditEmployee(Employee emp)
     {
@@ -138,7 +140,7 @@ public class HomeController : Controller
         Contract ctr = apiInstance.ContractsContractIdGet((int)id);
         return View(ctr);
     }
-    
+
     [HttpGet]
     public IActionResult CreateContract()
     {
@@ -153,7 +155,7 @@ public class HomeController : Controller
         apiInstance.ContractsPost(cp);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
     }
-   
+
     [HttpPost]
     public IActionResult EditContract(Contract ctr)
     {
@@ -181,7 +183,7 @@ public class HomeController : Controller
         History hst = apiInstance.HistoryHistoryIdGet((int)id);
         return View(hst);
     }
-    
+
     [HttpGet]
     public IActionResult CreateHistory()
     {
@@ -201,22 +203,22 @@ public class HomeController : Controller
     public IActionResult SimpleTracker()
     {
         var apiInstance = new DefaultApi(Configuration.Default);
-        stvm.Clients = apiInstance.ClientsGet();
-        stvm.Employees = apiInstance.EmployeesGet();
-        stvm.Contracts = apiInstance.ContractsGet();
-        stvm.Histories = apiInstance.HistoryGet();
-        
+        stvm.Clients = _context.Client.ToArray<ModelClient>();
+        stvm.Employees = _context.Employee.ToArray<Employee>();
+        stvm.Contracts = _context.Contract.ToArray<Contract>();
+        stvm.Histories = _context.History.ToArray<History>();
+
         string apiMethodType = this.ControllerContext.HttpContext.Request.Query["methodType"].ToString();
 
-        if(apiMethodType.Equals("employee"))
+        if (apiMethodType.Equals("employee"))
         {
             stvm.employeeActive = true;
         }
-        else if(apiMethodType.Equals("contract"))
+        else if (apiMethodType.Equals("contract"))
         {
             stvm.contractActive = true;
         }
-        else if(apiMethodType.Equals("history"))
+        else if (apiMethodType.Equals("history"))
         {
             stvm.historyActive = true;
         }
