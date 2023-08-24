@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleTracker.Web.Models;
 using SimpleTracker.Web.Client;
 using SimpleTracker.Web.Api;
-using SimpleTracker.Web.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SimpleTracker.Web.Controllers;
 
@@ -14,17 +14,16 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _webHostEnvironment;
     private readonly IConfiguration? _config;
-    private readonly SimpleTrackerContext _context;
     SimpleTrackerViewModel? stvm;
 
-    public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment, IConfiguration config, SimpleTrackerContext context)
+    public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment, IConfiguration config)
 	{
         _logger = logger;
         stvm = new SimpleTrackerViewModel();
 		_webHostEnvironment = webHostEnvironment;
         _config = config;
-        _context = context;
        Configuration.Default.BasePath = _config.GetValue<string>("ApiUrl");
+
 	}
 
     public IActionResult Index()
@@ -151,7 +150,7 @@ public class HomeController : Controller
     public IActionResult CreateContract(Contract ctr)
     {
         var apiInstance = new DefaultApi(Configuration.Default);
-        ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech[0].Split(',').ToList());
+        ContractPatch cp = new ContractPatch(ctr.ClientId, ctr.Type, ctr.StartDate, ctr.EndDate, ctr.Tech[0].Split(',').ToArray<string>());
         apiInstance.ContractsPost(cp);
         return Redirect(String.Format("{0}?{1}", Url.RouteUrl(new { controller = "Home", action = "SimpleTracker" }), "methodType=contract"));
     }
@@ -203,10 +202,10 @@ public class HomeController : Controller
     public IActionResult SimpleTracker()
     {
         var apiInstance = new DefaultApi(Configuration.Default);
-        stvm.Clients = _context.Client.ToArray<ModelClient>();
-        stvm.Employees = _context.Employee.ToArray<Employee>();
-        stvm.Contracts = _context.Contract.ToArray<Contract>();
-        stvm.Histories = _context.History.ToArray<History>();
+        stvm.Clients = apiInstance.ClientsGet();
+        stvm.Employees = apiInstance.EmployeesGet();
+        stvm.Contracts = apiInstance.ContractsGet();
+        stvm.Histories = apiInstance.HistoryGet();
 
         string apiMethodType = this.ControllerContext.HttpContext.Request.Query["methodType"].ToString();
 
