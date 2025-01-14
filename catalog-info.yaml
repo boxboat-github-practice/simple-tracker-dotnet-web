@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: simple-tracker-dotnet-web
+  annotations:
+    github.com/project-slug: boxboat-backstage/simple-tracker-dotnet-web
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - dotnet
+    - web-client
+spec:
+  type: frontend
+  system: simple-tracker
+  owner: group:fishdank
+  lifecycle: experimental
+  consumesApis:
+    - simple-tracker-api
